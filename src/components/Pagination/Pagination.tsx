@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { setPages } from '../../utils';
 
 type PaginationType = {
@@ -14,24 +13,22 @@ export const Pagination = ({
   currentPage,
   onPageChange,
 }: PaginationType) => {
-  const [active, setActive] = useState<number>(currentPage);
   const pagesAmount = Math.ceil(total.length / perPage);
   const pagesArr = setPages(pagesAmount);
 
   function pageChanger(value: number): void {
-    setActive(value);
     onPageChange(value);
   }
 
   return (
     <ul className="pagination">
-      <li className={`page-item${active === 1 ? ' disabled' : ''}`}>
+      <li className={`page-item${currentPage === 1 ? ' disabled' : ''}`}>
         <a
           data-cy="prevLink"
           className="page-link"
           href="#prev"
           aria-disabled="true"
-          onClick={() => pageChanger(active - 1)}
+          onClick={() => pageChanger(currentPage - 1)}
         >
           «
         </a>
@@ -40,7 +37,7 @@ export const Pagination = ({
       {pagesArr.map(page => (
         <li
           key={page}
-          className={`page-item ${active === +page ? 'active' : ''}`}
+          className={`page-item ${currentPage === +page ? 'active' : ''}`}
           onClick={() => pageChanger(+page)}
         >
           <a data-cy="pageLink" className="page-link" href={`#${page}`}>
@@ -49,13 +46,15 @@ export const Pagination = ({
         </li>
       ))}
 
-      <li className={`page-item${active === pagesAmount ? ' disabled' : ''}`}>
+      <li
+        className={`page-item${currentPage === pagesAmount ? ' disabled' : ''}`}
+      >
         <a
           data-cy="nextLink"
           className="page-link"
           href="#next"
           aria-disabled="false"
-          onClick={() => pageChanger(active + 1)}
+          onClick={() => pageChanger(currentPage + 1)}
         >
           »
         </a>

@@ -8,8 +8,10 @@ const items = getNumbers(1, 42).map(n => `Item ${n}`);
 
 type PerPage = 3 | 5 | 10 | 20;
 
+const selectedOption: PerPage = 5;
+
 export const App: React.FC = () => {
-  const [perPage, setPerPage] = useState<PerPage>(3);
+  const [perPage, setPerPage] = useState<PerPage>(selectedOption);
   const [page, setPage] = useState<number>(1);
 
   const itemsToShow = pagesItems(items, page, perPage);
@@ -24,8 +26,9 @@ export const App: React.FC = () => {
       <h1>Items with Pagination</h1>
 
       <p className="lead" data-cy="info">
-        Page {page} (items {itemsToShow[0]} -{' '}
-        {itemsToShow[itemsToShow.length - 1]} of {items.length})
+        Page {page} (items {itemsToShow[0].replace(/\D/g, '')} -{' '}
+        {itemsToShow[itemsToShow.length - 1].replace(/\D/g, '')} of{' '}
+        {items.length})
       </p>
 
       <div className="form-group row">
@@ -35,15 +38,25 @@ export const App: React.FC = () => {
             id="perPageSelector"
             className="form-control"
             onChange={ev => {
-              const val: PerPage = Number(ev.target.value);
+              const val: number = Number(ev.target.value);
 
-              perPageChanger(val);
+              if (val === 3 || val === 5 || val === 10 || val === 20) {
+                perPageChanger(val);
+              }
             }}
           >
-            <option value="3">3</option>
-            <option value="5">5</option>
-            <option value="10">10</option>
-            <option value="20">20</option>
+            <option value="3" selected={+selectedOption === 3 && true}>
+              3
+            </option>
+            <option value="5" selected={+selectedOption === 5 && true}>
+              5
+            </option>
+            <option value="10" selected={+selectedOption === 10 && true}>
+              10
+            </option>
+            <option value="20" selected={+selectedOption === 20 && true}>
+              20
+            </option>
           </select>
         </div>
 
