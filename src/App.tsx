@@ -4,6 +4,7 @@ import { getNumbers, pagesItems } from './utils';
 import { Pagination } from './components/Pagination';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
+// const items = getNumbers(0).map(n => `Item ${n}`);
 const items = getNumbers(1, 42).map(n => `Item ${n}`);
 
 type PerPage = 3 | 5 | 10 | 20;
@@ -25,11 +26,15 @@ export const App: React.FC = () => {
     <div className="container">
       <h1>Items with Pagination</h1>
 
-      <p className="lead" data-cy="info">
-        Page {page} (items {itemsToShow[0].replace(/\D/g, '')} -{' '}
-        {itemsToShow[itemsToShow.length - 1].replace(/\D/g, '')} of{' '}
-        {items.length})
-      </p>
+      {itemsToShow.length > 0 ? (
+        <p className="lead" data-cy="info">
+          Page {page} (items {itemsToShow[0].replace(/\D/g, '')} -{' '}
+          {itemsToShow[itemsToShow.length - 1].replace(/\D/g, '')} of{' '}
+          {items.length})
+        </p>
+      ) : (
+        <p>Page has no content</p>
+      )}
 
       <div className="form-group row">
         <div className="col-3 col-sm-2 col-xl-1">
@@ -67,7 +72,7 @@ export const App: React.FC = () => {
 
       {/* Move this markup to Pagination */}
       <Pagination
-        total={items}
+        total={items.length}
         perPage={perPage}
         currentPage={page}
         onPageChange={newPage => {

@@ -1,7 +1,7 @@
 import { setPages } from '../../utils';
 
 type PaginationType = {
-  total: string[];
+  total: number;
   perPage: number;
   currentPage: number;
   onPageChange: (page: number) => void;
@@ -13,7 +13,7 @@ export const Pagination = ({
   currentPage,
   onPageChange,
 }: PaginationType) => {
-  const pagesAmount = Math.ceil(total.length / perPage);
+  const pagesAmount = Math.ceil(total / perPage);
   const pagesArr = setPages(pagesAmount);
 
   function pageChanger(value: number): void {
@@ -22,7 +22,9 @@ export const Pagination = ({
 
   return (
     <ul className="pagination">
-      <li className={`page-item${currentPage === 1 ? ' disabled' : ''}`}>
+      <li
+        className={`page-item${currentPage === 1 || total === 0 ? ' disabled' : ''}`}
+      >
         <a
           data-cy="prevLink"
           className="page-link"
@@ -34,20 +36,32 @@ export const Pagination = ({
         </a>
       </li>
 
-      {pagesArr.map(page => (
+      {pagesArr.length > 0 ? (
+        pagesArr.map(page => (
+          <li
+            key={page}
+            className={`page-item ${currentPage === +page ? 'active' : ''}`}
+            onClick={() => pageChanger(+page)}
+          >
+            <a data-cy="pageLink" className="page-link" href={`#${page}`}>
+              {page}
+            </a>
+          </li>
+        ))
+      ) : (
         <li
-          key={page}
-          className={`page-item ${currentPage === +page ? 'active' : ''}`}
-          onClick={() => pageChanger(+page)}
+          key={1}
+          className={`page-item ${currentPage === 1 ? 'active' : ''}`}
+          onClick={() => pageChanger(1)}
         >
-          <a data-cy="pageLink" className="page-link" href={`#${page}`}>
-            {page}
+          <a data-cy="pageLink" className="page-link" href={`#${1}`}>
+            {1}
           </a>
         </li>
-      ))}
+      )}
 
       <li
-        className={`page-item${currentPage === pagesAmount ? ' disabled' : ''}`}
+        className={`page-item${currentPage === pagesAmount || total === 0 ? ' disabled' : ''}`}
       >
         <a
           data-cy="nextLink"
