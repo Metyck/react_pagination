@@ -42,6 +42,7 @@ export const App: React.FC = () => {
             data-cy="perPageSelector"
             id="perPageSelector"
             className="form-control"
+            value={perPage}
             onChange={ev => {
               const val: number = Number(ev.target.value);
 
